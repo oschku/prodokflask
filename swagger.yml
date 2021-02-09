@@ -12,23 +12,121 @@ basePath: "/api"
 
 # Paths supported by the server application
 paths:
-  /people:
+  /valuation:
     get:
-      operationId: "people.read"
-      tags:
-        - "People"
-      summary: "The people data structure supported by the server application"
-      description: "Read the list of people"
+      operationId: "main.run"
+      parameters:
+        - name: osoite
+          description: Kohteen osoite tekstimuodossa, sisältäen numeron ja mahdollisesti rappu.
+          in: query
+          type: string
+          required: true
+        - name: kerros
+          description: Kerrosnumero.
+          in: query
+          type: integer
+          required: true
+        - name: parveke
+          description: Parveke. TRUE = 1, FALSE = 0
+          in: query
+          type: integer
+          required: true
+        - name: kunta
+          description: Kunta, tekstimuodossa.
+          in: query
+          type: string
+          required: true
+        - name: kerros_yht
+          description: Kerroksia yhteensä.
+          in: query
+          type: integer
+          required: true
+        - name: tonttiala
+          description: Kohteen tonttiala.
+          in: query
+          type: number
+          required: true
+        - name: postinumero
+          description: Postinumero, esimerkiksi 00120.
+          in: query
+          type: string
+          required: true
+        - name: kunto
+          description: Kohteen kunto, välttävä - erinomainen.
+          in: query
+          type: string
+          required: true
+        - name: muu_kerrosala
+          description: Muu kerrosala, esimerkiksi kellaritilat, vintti yms.
+          in: query
+          type: number
+          required: true
+        - name: asuntotyyppi
+          description: Asunnon tyyppi, esim kerrostalo/omakotitalo yms.
+          in: query
+          type: string
+          required: true
+        - name: tontti
+          description: Tonttityyppi, vuokra tai omistus.
+          in: query
+          type: string
+          required: true
+        - name: created_on
+          description: User query date and time.
+          in: query
+          type: string
+          required: true
+        - name: asuinala
+          description: Kohteen asuinala neliöissä.
+          in: query
+          type: number
+          required: true
+        - name: vastike
+          description: Kohteen vastike, e/kk (integer).
+          in: query
+          type: number
+          required: true
+        - name: user
+          description: Käyttäjän id numero.
+          in: query
+          type: integer
+          required: true
+        - name: rakennusvuosi
+          description: Kohteen rakennusvuosi
+          in: query
+          type: integer
+          required: true
+        - name: vuokrattu
+          description: Onko kohde vuokrattu, TRUE = 1, FALSE = 0
+          in: query
+          type: integer
+          required: true
+        - name: query_id
+          description: ID for the query
+          in: query
+          type: string
+          required: true
+        - name: huone_lkm
+          description: Huoneiden lukumäärä.
+          in: query
+          type: integer
+          required: true
+        - name: hissi
+          description: Onko taloyhtiössä/kohteessa hissi, TRUE = 1, FALSE = 0
+          in: query
+          type: integer
+          required: true
+        - name: id
+          description: db query id
+          in: query
+          type: integer
+          required: true
+        - name: sauna
+          description: Kohteessa sauna, TRUE = 1, FALSE = 0
+          in: query
+          type: integer
+          required: true
       responses:
         200:
-          description: "Successful read people list operation"
-          schema:
-            type: "array"
-            items:
-              properties:
-                fname:
-                  type: "string"
-                lname:
-                  type: "string"
-                timestamp:
-                  type: "string"
+          description: "Successful operation"
+          
