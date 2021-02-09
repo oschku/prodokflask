@@ -60,7 +60,13 @@ def run(
     }
     
 
+    hinta = valuation.calculate(data, query_id)
+    hinta = float(hinta)
+    hinta = round(hinta, -3)
+    lat,lng = valuation.geodata.geocode(osoite, kunta)
 
-
+    data.update({'hinta': hinta})
+    data.update({'lat':lat})
+    data.update({'lng':lng})
 
     return data

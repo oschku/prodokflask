@@ -42,6 +42,8 @@ load_dotenv(dotenv_path)
 
 env_dir = str(os.environ['WORK_DIR'])
 
+p = Path(__file__).parents[1]
+
 if env_dir == 'docker':
     wdir  = '/app/project'
 elif env_dir == 'local':
@@ -75,14 +77,10 @@ xgb_file_name = MODEL_DIR + '/xgb_model.pkl'
 
 def get_data(UserInput, query_id):
     
-    user_input = UserInput.query.filter_by(query_id = query_id).all()
 
-    output_dict = {}
 
-    
+    output_dict = UserInput
 
-    for row in user_input:
-        output_dict.update(row.__dict__)
 
     print(output_dict)
     
