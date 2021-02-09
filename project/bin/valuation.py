@@ -27,7 +27,6 @@ from babel.numbers import format_currency
 import sys
 # import tensorflow as tf, use this if/when we use tensorflows models. So far XGBoost has much better performance
 import xgboost as xgb
-from ..models import db, UserInput
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -41,12 +40,12 @@ p = Path(__file__).parents[2]
 dotenv_path = os.path.join(p, '.env')
 load_dotenv(dotenv_path)
 
-env_dir = os.environ['WORK_DIR']
+env_dir = str(os.environ['WORK_DIR'])
 
 if env_dir == 'docker':
     wdir  = '/app/project'
 elif env_dir == 'local':
-    wdir = p
+    wdir = str(p)
 
 pickle_files = ['output', 'housing_types', 'postnumbers'] # All files that use the pickle format
 DATA_DIR = wdir + "/data"
