@@ -1,0 +1,25 @@
+GET http://localhost:5000/api/valuation/?osoite=Vilhonvuorenkatu+12&kunta=Helsinki&postinumero=00500&tyyppi=Kerrostalo&Asuinala=120.0&rak_ika=65&Huoneita=3&Kerrosnumero=6&Kerrokset=8&kunto=Hyv%C3%A4&tontti=Vuokra&Hoitovastike=800.0&Vuokrattu=0&Hissi=1&Sauna=1&Parveke=1&Tontin_ala_nelioina=0.0&Muu_ala=0.0&Hoitovastike_per_nelio=6.666666666666667&Uudiskohde=0&Myyntiaika_pv=83
+Content-Type: application/json
+
+# Request dictionary:
+# {'osoite': 'Vilhonvuorenkatu 12', 
+# 'kunta': 'Helsinki', 
+# 'postinumero': '00500', 
+# 'tyyppi': 'Kerrostalo', 
+# 'Asuinala': 120.0, 
+# 'rak_ika': 65, 
+# 'Huoneita': 3, 
+# 'Kerrosnumero': 6, 
+# 'Kerrokset': 8, 
+# 'kunto': 'Hyvä', 
+# 'tontti': 'Vuokra', 
+# 'Hoitovastike': 800.0, 
+# 'Vuokrattu': 0, 
+# 'Hissi': 1, 
+# 'Sauna': 1, 
+# 'Parveke': 1, 
+# 'Tontin_ala_nelioina': 0.0, 
+# 'Muu_ala': 0.0, 
+# 'Hoitovastike_per_nelio': 6.666666666666667, 
+# 'Uudiskohde': 0, 
+# 'Myyntiaika_pv': 83}
