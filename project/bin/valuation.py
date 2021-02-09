@@ -6,8 +6,7 @@ Created on Mon Sep 21 15:40:40 2020
 
 @author: Oskari Honkasalo
 
-This is a PyQT user interface created with QT Designer. This python sctipt
-launches a PyQT user interface, which is used to gather user input data.
+
 """
 
 
@@ -33,8 +32,11 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from . import tm35
+from dotenv import load_dotenv
 
-p = Path(__file__).parents[1]
+
+
+p = Path(__file__).parents[2]
 
 dotenv_path = os.path.join(p, '.env')
 load_dotenv(dotenv_path)
@@ -44,7 +46,7 @@ env_dir = os.environ['WORK_DIR']
 if env_dir == 'docker':
     wdir  = '/app/project'
 elif env_dir == 'local':
-    wdir = 'E:/flask_valuation_app/app/project'
+    wdir = p
 
 pickle_files = ['output', 'housing_types', 'postnumbers'] # All files that use the pickle format
 DATA_DIR = wdir + "/data"
