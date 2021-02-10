@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Connexion",
+            "type": "python",
+            "request": "launch",
+            "module": "connexion",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "C:\\Users\\Omistaja\\anaconda3\\envs\\flask_env\\python.exe"
+            },
+            "args": [
+                "run",
+                "./swagger.yml",
+                "--port",
+                "5000"
+            ]
+        }
+    ]
+}

@@ -309,7 +309,7 @@ class ui_input():
         prediction = prediction*size
         print('xgboost: ' + str(prediction))
         
-        return prediction
+        return prediction, nn_inference_input
     
     
     
@@ -319,8 +319,8 @@ class ui_input():
     def count_price(UserInput, query_id):    
         nn_input_data = ui_input.get_app_data(DATA_DIR, UserInput, query_id)
         ui_input.convert_data(nn_input_data)
-        price = ui_input.inference(COL_PATH, UserInput, query_id)
-        return price
+        price, dataset = ui_input.inference(COL_PATH, UserInput, query_id)
+        return price, dataset
 
 
 
@@ -663,9 +663,9 @@ class geodata():
 
 
 def calculate(UserInput, query_id):
-    price = ui_input.count_price(UserInput, query_id)
+    price, dataset = ui_input.count_price(UserInput, query_id)
     print(price)
-    return price
+    return price, dataset
 
 
 
