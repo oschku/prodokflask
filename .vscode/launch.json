@@ -15,7 +15,7 @@
             },
             "args": [
                 "run",
-                "./swagger.yml",
+                "./specfile.yml",
                 "--port",
                 "5000"
             ]
