@@ -10,7 +10,7 @@ click==7.1.2
 click-plugins==1.1.1
 cligj==0.7.0
 colorama==0.4.4
-cryptography==3.2
+cryptography==3.3.2
 dnspython==2.0.0
 email_validator==1.1.1
 fiona==1.8.13
