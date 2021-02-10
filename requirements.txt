@@ -76,3 +76,8 @@ flask-script==2.0.6
 python-dotenv==0.15.0
 redis==3.5.3
 plotly==4.13.0
+swagger-ui-bundle == 0.0.8
+connexion == 2020.0.dev1
+flask-swagger-ui == 3.36.0
+
+

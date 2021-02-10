@@ -57,6 +57,6 @@ ADD . /
 
 ENTRYPOINT [ "python" ]
 
-CMD [ "launch.py", "--host", "0.0.0.0"]
+CMD [ "api.py", "--host", "0.0.0.0"]
 
 EXPOSE 5000
