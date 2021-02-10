@@ -1,0 +1,4 @@
+[{
+    "name": "flask-container",
+    "imageUri": "740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-repo:latest"
+}]
