@@ -30,7 +30,6 @@ def run(
     query_id,
     huone_lkm,
     hissi,
-    id,
     sauna
 ):
     data = {
@@ -57,7 +56,6 @@ def run(
     'huone_lkm': huone_lkm, 
     'hissi': hissi, 
     'hinta': None, 
-    'id': id, 
     'sauna': sauna
     }
     
@@ -70,6 +68,14 @@ def run(
     data.update({'hinta': hinta})
     data.update({'lat':lat})
     data.update({'lng':lng})
+
+    data.pop('rak_ika')
+    data.pop('uudiskohde')
+    data.pop('hoitovastike_per_nelio')
+
+    luokat = valuation.kuntonumerot
+    data.update({'kunto' : luokat.get(data('kunto'))})
+
 
     ui_result = UserInput(**data)
     db.session.add(ui_result)

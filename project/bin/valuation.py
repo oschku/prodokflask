@@ -105,6 +105,8 @@ def get_data(UserInput, query_id):
 
 
 class ui_input():
+    kuntonumerot = {2: 'Uusi', 1:'Erinomainen', 0:'Hyvä', -1:'Tyydyttävä', -2:'Huono'}
+
     def get_pickle(filedir, filename):
         '''
         Retreives the user's inputs from the ui application 

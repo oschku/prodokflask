@@ -105,11 +105,6 @@ paths:
         in: query
         type: integer
         required: true
-      - name: query_id
-        description: ID for the query
-        in: query
-        type: string
-        required: true
       - name: huone_lkm
         description: Huoneiden lukumäärä.
         in: query
@@ -120,10 +115,10 @@ paths:
         in: query
         type: integer
         required: true
-      - name: id
-        description: db query id
+      - name: query_id
+        description: ID for the query
         in: query
-        type: integer
+        type: string
         required: true
       - name: sauna
         description: Kohteessa sauna, TRUE = 1, FALSE = 0
@@ -238,11 +233,6 @@ paths:
         required: true
       - name: hissi
         description: Onko taloyhtiössä/kohteessa hissi, TRUE = 1, FALSE = 0
-        in: query
-        type: integer
-        required: true
-      - name: id
-        description: db query id
         in: query
         type: integer
         required: true
