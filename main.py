@@ -1,13 +1,14 @@
 from datetime import datetime
 from project import valuation
 import json
+from project.models import UserInput
+from project.models import db
 
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%m:%S"))
 
-#create read handler
-# @app.route('')
+
 def run(
     osoite,
     kerros,
@@ -70,7 +71,15 @@ def run(
     data.update({'lat':lat})
     data.update({'lng':lng})
 
+    ui_result = UserInput(**data)
+    db.session.add(ui_result)
+    db.session.commit()
+
+
     return data
+
+
+
 
 def input(
     osoite,
