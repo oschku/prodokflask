@@ -13,7 +13,7 @@ def create_app():
     
     app = connexion.App(__name__, specification_dir='./')
     p = str(Path(__file__).parents[1])
-    app.add_api(p + '\\specfile.yml')
+    app.add_api(p + '/specfile.yml')
 
     application = app.app
     application.config.from_object(config.Config)
