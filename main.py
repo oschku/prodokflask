@@ -58,31 +58,88 @@ def run(
     'hinta': None, 
     'sauna': sauna
     }
+
     
 
-    hinta, dataset = valuation.calculate(data, query_id)
-    hinta = float(hinta)
-    hinta = round(hinta, -3)
-    lat,lng = valuation.geodata.geocode(osoite, kunta)
 
-    data.update({'hinta': hinta})
-    data.update({'lat':lat})
-    data.update({'lng':lng})
+    try:
+        hinta, dataset = valuation.calculate(data, query_id)
+        hinta = float(hinta)
+        hinta = round(hinta, -3)
+        lat,lng = valuation.geodata.geocode(osoite, kunta)
 
-    data.pop('rak_ika')
-    data.pop('uudiskohde')
-    data.pop('hoitovastike_per_nelio')
+        data.update({'hinta': hinta})
+        data.update({'lat':lat})
+        data.update({'lng':lng})
+        
+        data.pop('rak_ika')
+        data.pop('uudiskohde')
+        data.pop('hoitovastike_per_nelio')
 
-    luokat = valuation.kuntonumerot
-    data.update({'kunto' : luokat.get(data('kunto'))})
+        luokat = valuation.ui_input.kuntonumerot
+        data.update({'kunto' : luokat.get(data.get('kunto'))})
+
+        ui_result = UserInput(**data)
+        db.session.add(ui_result)
+        db.session.commit()
 
 
-    ui_result = UserInput(**data)
-    db.session.add(ui_result)
-    db.session.commit()
+        return data
+        
+    
+    except ValueError as V:
+        
+        response = {}
+        data.pop('rak_ika')
+        data.pop('uudiskohde')
+        data.pop('hoitovastike_per_nelio')
+
+        ui_result = UserInput(**data)
+        db.session.add(ui_result)
+        db.session.commit()
+  
+
+        if V.args[1] == 'street':
+            print('Osoite on virheellinen','street_err')
+            print(V.args[1])
+            response = {'Error': 'street_error', 'message':'Osoite on virheellinen'}
+        elif V.args[1] == 'country':
+            print('Osoite on virheellinen','input_err')
+            print(V.args[1])
+            response = {'Error': 'country_error', 'message':'Osoite on virheellinen'}
+        elif V.args[1] == 'city':
+            print( f'Kunnasta {data.get("kunta")} ei löytynyt osoitetta {data.get("osoite")}. Tarkista kunta','city_err')
+            print(V.args[1])
+            print(UserInput.osoite)
+            response = {'Error': 'city_error', 'message':f'Kunnasta {data.get("kunta")} ei löytynyt osoitetta {data.get("osoite")}. Tarkista kunta'}
+        elif V.args[1] == 'bad_score':
+            print( f'Osoitteella {data.get("osoite")} epäselvä osumatulos. Kokeile toista osoitetta','street_err')
+            print(V.args[1])
+            print(UserInput.osoite)
+            response = {'Error': 'bad_score', 'message':f'Osoitteella {data.get("osoite")} epäselvä osumatulos. Kokeile toista osoitetta'}
+        elif V.args[1] == 'multiple_streets':
+            print( f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa','street_err')
+            print(V.args[1])
+            print(UserInput.osoite)
+            response = {'Error': 'number_error', 'message': f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa'}
+        elif V.args[1] == 'no_streets':
+            print( f'Osoite on virheellinen','street_number')
+            print(V.args[1])
+            print(UserInput.osoite)
+            response = {'Error': 'street_not_found', 'message':'Kyseistä osoitetta ei löydy'}
+        elif V.args[1] == 'street_number':
+            print( f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa','street_err')
+            print(V.args[1])
+            print(UserInput.osoite)
+            response = {'Error': 'number_error', 'message': f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa'}
+        
+        
 
 
-    return data
+        return response, 406
+
+
+
 
 
 

@@ -377,7 +377,7 @@ class geodata():
                 if data['items'][0]['scoring']['queryScore'] < 0.8:
                     raise ValueError('Bad street query', 'bad_score')
                 else:
-                    raise ValueError('Street missing house number', 'multiple_streets')
+                    raise ValueError('Street missing house number', 'street_number')
 
 
             if mun_exists == True:

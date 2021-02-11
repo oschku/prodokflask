@@ -128,6 +128,8 @@ paths:
       responses:
         200:
           description: "Successful operation"
+        406:
+          description: "An error occurred with the given inputs, check reponse message"
   
   
   /input_data:
