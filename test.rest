@@ -1,30 +1,3 @@
-GET http://localhost:5000/api/valuation?osoite=Mellunm%C3%A4enraitio+2&kerros=2&parveke=1&kunta=Helsinki&kerros_yht=3&tonttiala=1.0&postinumero=00970&kunto=Hyv%C3%A4&muu_kerrosala=2.0&asuntotyyppi=Kerrostalo&tontti=Vuokra&created_on=datetime.datetime%282021%2C+2%2C+9%2C+11%2C+28%2C+5%2C+694923%29&asuinala=70.0&vastike=500.0&user=3&rakennusvuosi=1989&vuokrattu=0&query_id=EA6Y0ZADMR&huone_lkm=3&hissi=0&id=281&sauna=0
+GET http://localhost:5000/api/valuation?apiKey=bshWIEe2dQV1avsY3uCgwpnBh2HHbOQAaxaTQxWa&osoite=Vilhonvuorenkatu%2012&kerros=1&parveke=1&kunta=Helsinki&kerros_yht=6&tonttiala=1&postinumero=00500&kunto=Hyv%C3%A4&muu_kerrosala=1&asuntotyyppi=Kerrostalo&tontti=vuokra&created_on=12.12.2020&asuinala=50&vastike=500&user=1&rakennusvuosi=2020&vuokrattu=1&huone_lkm=1&hissi=1&query_id=F93KJN2185&sauna=1
 Content-Type: application/json
 
-# Request dictionary:
-
-# 'osoite': 'Mellunmäenraitio 2', 
-# 'kerros': 2, 
-# 'parveke': 1, 
-# 'lat': None, 
-# 'kunta': 'Helsinki', 
-# 'kerros_yht': 3, 
-# 'tonttiala': 1.0, 
-# 'lng': None, 
-# 'postinumero': '00970', 
-# 'kunto': 'Hyvä', 
-# 'muu_kerrosala': 2.0, 
-# 'asuntotyyppi': 'Kerrostalo', 
-# 'tontti': 'Vuokra', 
-# 'created_on': 'datetime.datetime(2021, 2, 9, 11, 28, 5, 694923)', 
-# 'asuinala': 70.0, 
-# 'vastike': 500.0, 
-# 'user': '3', 
-# 'rakennusvuosi': 1989, 
-# 'vuokrattu': 0, 
-# 'query_id': 'EA6Y0ZADMR', 
-# 'huone_lkm': 3, 
-# 'hissi': 0, 
-# 'hinta': None, 
-# 'id': 281, 
-# 'sauna': 0

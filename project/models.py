@@ -31,3 +31,9 @@ class UserInput(db.Model):
 	hinta = db.Column(db.Numeric, nullable=True)
 	lat = db.Column(db.Numeric, nullable = True)
 	lng = db.Column(db.Numeric, nullable = True)
+
+
+class ApiKey(db.Model):
+	__tablename__ = 'api_keys'
+	user_id = db.Column(db.Integer, db.ForeignKey('user_input.id'), primary_key = True, nullable = False)
+	apikey = db.Column(db.String(40), nullable = False, unique = True)

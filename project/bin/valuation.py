@@ -33,7 +33,9 @@ from pathlib import Path
 from . import tm35
 from dotenv import load_dotenv
 
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 p = Path(__file__).parents[2]
 
@@ -77,12 +79,7 @@ xgb_file_name = MODEL_DIR + '/xgb_model.pkl'
 
 def get_data(UserInput, query_id):
     
-
-
     output_dict = UserInput
-
-
-    print(output_dict)
     
     hoitovastike_per_nelio = output_dict.get('vastike')/output_dict.get('asuinala')
 
@@ -97,7 +94,7 @@ def get_data(UserInput, query_id):
     output_dict.update({'hoitovastike_per_nelio': hoitovastike_per_nelio})
     output_dict.update({'rak_ika':rak_ika})
 
-    print(output_dict)
+
 
 
     return output_dict
@@ -233,7 +230,6 @@ class ui_input():
         ui_data = pd.Series(ui_data).to_frame().T
         ui_data = pd.DataFrame.from_records(ui_data)
         ui_data = ui_data.iloc[:,4:]
-        print(ui_data)
         #ui_data.pop('tontti')
         try:
             ui_data.drop('created_on', inplace=True, axis=1)
@@ -269,7 +265,6 @@ class ui_input():
         dataset.columns = dataset.columns.str.replace('ä','a')
         dataset.columns = dataset.columns.str.replace('ö','o')
         train_dataset = dataset.iloc[:,:len(dataset.columns)-1]
-        print(train_dataset)
               
         
         # Load model from checkpoint, load standard scaler and infeerence input   
@@ -282,7 +277,6 @@ class ui_input():
         # re-arrange columns correctly
         orig_columns = list(train_dataset.columns) 
         nn_inference_input_reordered = nn_inference_input.reindex(columns=orig_columns)
-        print(nn_inference_input_reordered)
         nn_inference_input_reordered.to_csv(DATA_DIR + '/nn_input.csv')
         
         nn_input = norm.transform(nn_inference_input_reordered)
@@ -295,6 +289,7 @@ class ui_input():
         # print('neural network :' + str(prediction))
         
         # Inference with xgboost
+        print('loading input data into xgboost model for inference')
         xgb_model_loaded = pickle.load(open(xgb_file_name, "rb"))
         dpred = xgb.DMatrix(nn_input)
         prediction = xgb_model_loaded.predict(dpred)
@@ -305,7 +300,6 @@ class ui_input():
             output_dict2 = {}
             for row in u_input:
                 output_dict2.update(row.__dict__)
-                print(row)
             size = output_dict2.get('asuinala')
             
         prediction = prediction*size
@@ -340,6 +334,7 @@ class geodata():
         Takes a street name string as an input and returns its coordinates 
         
         """
+        print('geocoding address to coordinates')
         kunta_nro = 0
         mun_exists = False
 
@@ -402,7 +397,7 @@ class geodata():
         # https://automating-gis-processes.github.io/site/notebooks/L3/nearest-neighbor-faster.html
         
         """Find nearest neighbors for all source points from a set of candidate points"""
-    
+        print('balltree get nearest function - hsl')
         # Create tree from the candidate points
         tree = BallTree(candidates, leaf_size=15, metric='haversine')
     
@@ -429,6 +424,8 @@ class geodata():
     
         NOTICE: Assumes that the input Points are in WGS84 projection (lat/lon).
         """
+
+        print('fetching nearest hsl stops')
     
         left_geom_col = left_gdf.geometry.name
         right_geom_col = right_gdf.geometry.name
@@ -491,7 +488,7 @@ class geodata():
         gdf = gpd.GeoDataFrame(
             df_coords, geometry=gpd.points_from_xy(df_coords.Lng, df_coords.Lat))
         
-    
+        print('retreiving hsl stop data')
         # request from HSL API Endpoint URL
         URL = 'https://opendata.arcgis.com/datasets/b2aa879ce93c4068ac63b64d71f24947_0.geojson?where=VERKKO%20%3E%3D%202%20AND%20VERKKO%20%3C%3D%204'
         r = requests.get(URL)
@@ -538,10 +535,12 @@ class geodata():
         # Spatial join, where the left table is the point coordinate of the input
         # and the right table is the ykr grid table. The join result gives the YKR_ID
         # where the input point lies within / intersects
+        print('calculating ykr grid id')
         ykr_id = gpd.sjoin(gdf, ykr_grids, how='left', op='intersects')['YKR_ID'][0]
         
         # The YKR_ID is then used to retrieve the corresponding travel time from
         # the time travel matrix and a travel time list is returned
+        print('checking grid travel time from travel time matrix')
         travel_times_df = pd.read_csv(travel_time_location, sep=';')
         travel_time = travel_times_df[travel_times_df['from_id']==ykr_id]
             
@@ -567,6 +566,7 @@ class geodata():
         # Spatial join, where the left table is the point coordinate of the input
         # and the right table is the hsy table. The join result gives the hsy grid 
         # where the input point lies within / intersects
+        print('inersecting hsy grid data to point')
         hsy_data = gpd.sjoin(gdf, hsy_grids, how='left', op='intersects')
         
         return hsy_data
@@ -605,11 +605,13 @@ class geodata():
         point = Point(x_coord, y_coord)   
         
         # Read in the shoreline shapefile and convert to shapely MultiPolygon
+        print('reading in shoreline shapefile and converting to multipolygon')
         sea_area = gpd.read_file(shp_location + "merialue_tm35.shp")
         polyg = sea_area['geometry']
         poly = MultiPolygon(polyg.all())
         
         # Measure the distance to the shoreline
+        print('calculating distance to closest shoreline')
         min_dist = 30000
         for polygon in poly:
             dist = polygon.exterior.distance(point)
@@ -624,7 +626,10 @@ class geodata():
         If a specific date is given as the 'date_time' input, then the CPI for that month.
     
         '''
+        print('fetching latest cpi')
+        
         URL = 'http://pxnet2.stat.fi/PXWeb/api/v1/fi/StatFin/hin/khi/kk/statfin_khi_pxt_11xl.px'
+        
         
         if optional_arg == 'date_time':
             today = date.today() - timedelta(45)
@@ -654,9 +659,44 @@ class geodata():
         
         r = requests.post(URL, data=params)
         r = r.json()
-        cpi_value = r['dataset']['value'][0]
+
+        try:
+            cpi_value = r['dataset']['value'][0]
+            return cpi_value
         
-        return cpi_value
+        
+        except:
+            if optional_arg == 'date_time':
+                today = date.today() - timedelta(60)
+                year = today.strftime("%Y")
+                month = today.strftime("%m")
+            else:
+                year = optional_arg.strftime("%Y")
+                month = optional_arg.strftime("%m")
+            
+            time_stamp = year + "M" + month
+            params = '''{
+            "query": [
+                {
+                "code": "Kuukausi",
+                "selection": {
+                    "filter": "item",
+                    "values": [    
+                    ''' + '''"''' + time_stamp +  '''"''' + '''
+                    ]
+                }
+                }
+            ],
+            "response": {
+                "format": "json-stat"
+            }
+            }'''
+            
+            r = requests.post(URL, data=params)
+            r = r.json()
+            result = r['dataset']['value'][0]
+            
+            return result
 
 
 

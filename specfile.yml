@@ -20,6 +20,11 @@ paths:
       - "valuation"
       operationId: "main.run"
       parameters:
+      - name: apiKey
+        description: The API Key identifier
+        in: query
+        type: string
+        required: true
       - name: osoite
         description: Kohteen osoite tekstimuodossa, sisältäen numeron ja mahdollisesti rappu.
         in: query
