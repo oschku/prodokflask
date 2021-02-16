@@ -4,8 +4,8 @@ phases:
     commands: 
       - "echo Build started on `date`"
       - "echo Building the Docker image..."
-      - "docker build -t oschku/mvp-build ."
-      - "docker tag oschku/mvp-build 740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-backend"
+      - "docker build -t oschku/mvp-backend ."
+      - "docker tag oschku/mvp-backend 740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-backend"
   post_build: 
     commands: 
       - "echo Build completed on `date`"
