@@ -66,7 +66,7 @@ def run(
     }
 
 
-    key = 'bshWIEe2dQV1avsY3uCgwpnBh2HHbOQAaxaTQxWa_'
+    # key = 'bshWIEe2dQV1avsY3uCgwpnBh2HHbOQAaxaTQxWa_'
     current_user = int(data.get('user'))
     sql = (f'SELECT apikey FROM public.api_keys \
         WHERE api_keys.user_id = {current_user} \
@@ -186,7 +186,6 @@ def input(
     query_id,
     huone_lkm,
     hissi,
-    id,
     sauna
 ):
     data = {
@@ -212,31 +211,95 @@ def input(
     'query_id': query_id, 
     'huone_lkm': huone_lkm, 
     'hissi': hissi, 
-    'hinta': None, 
-    'id': id, 
+    'hinta': None,  
     'sauna': sauna
     }
     
+    current_user = int(data.get('user'))
+    sql = (f'SELECT apikey FROM public.api_keys \
+        WHERE api_keys.user_id = {current_user} \
+                ORDER BY user_id ASC   ')
 
-    hinta, dataset = valuation.calculate(data, query_id)
-    hinta = float(hinta)
-    hinta = round(hinta, -3)
-    lat,lng = valuation.geodata.geocode(osoite, kunta)
+    with db.engine.connect() as connection:
+        results = pd.read_sql(sql = sql, con = connection)
+        key = results.iloc[0,0]
+    
+    
+    if apiKey != key:
+        response = {'Auth error': 'API Key not valid'}, 400
+        return response
+    else:
+        try:
+            hinta, dataset = valuation.calculate(data, query_id)
+            hinta = float(hinta)
+            hinta = round(hinta, -3)
+            lat,lng = valuation.geodata.geocode(osoite, kunta)
 
-    cols = dataset.columns
-    values = dataset.values
+            cols = dataset.columns
+            values = dataset.values
 
-    print(cols[0])
-    print(values[0])
+            print(cols[0])
+            print(values[0])
 
-    df_dict = {}
-    for col, val in zip(cols, values[0]):
-        df_dict.update({col : val})
+            df_dict = {}
+            for col, val in zip(cols, values[0]):
+                df_dict.update({col : val})
 
-    df_dict.update({'hinta': hinta})
-    df_dict.update({'lat':lat})
-    df_dict.update({'lng':lng})
+            df_dict.update({'hinta': hinta})
+            df_dict.update({'lat':lat})
+            df_dict.update({'lng':lng})
 
-    #input_values = json.dumps(df_dict, indent = 4)    
+            #input_values = json.dumps(df_dict, indent = 4)    
 
-    return df_dict
+            return df_dict
+        
+        except ValueError as V:
+            
+            response = {}
+            data.pop('rak_ika')
+            data.pop('uudiskohde')
+            data.pop('hoitovastike_per_nelio')
+
+            ui_result = UserInput(**data)
+            db.session.add(ui_result)
+            db.session.commit()
+    
+
+            if V.args[1] == 'street':
+                print('Osoite on virheellinen','street_err')
+                print(V.args[1])
+                response = {'Error': 'street_error', 'message':'Osoite on virheellinen'}
+            elif V.args[1] == 'country':
+                print('Osoite on virheellinen','input_err')
+                print(V.args[1])
+                response = {'Error': 'country_error', 'message':'Osoite on virheellinen'}
+            elif V.args[1] == 'city':
+                print( f'Kunnasta {data.get("kunta")} ei löytynyt osoitetta {data.get("osoite")}. Tarkista kunta','city_err')
+                print(V.args[1])
+                print(UserInput.osoite)
+                response = {'Error': 'city_error', 'message':f'Kunnasta {data.get("kunta")} ei löytynyt osoitetta {data.get("osoite")}. Tarkista kunta'}
+            elif V.args[1] == 'bad_score':
+                print( f'Osoitteella {data.get("osoite")} epäselvä osumatulos. Kokeile toista osoitetta','street_err')
+                print(V.args[1])
+                print(UserInput.osoite)
+                response = {'Error': 'bad_score', 'message':f'Osoitteella {data.get("osoite")} epäselvä osumatulos. Kokeile toista osoitetta'}
+            elif V.args[1] == 'multiple_streets':
+                print( f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa','street_err')
+                print(V.args[1])
+                print(UserInput.osoite)
+                response = {'Error': 'number_error', 'message': f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa'}
+            elif V.args[1] == 'no_streets':
+                print( f'Osoite on virheellinen','street_number')
+                print(V.args[1])
+                print(UserInput.osoite)
+                response = {'Error': 'street_not_found', 'message':'Kyseistä osoitetta ei löydy'}
+            elif V.args[1] == 'street_number':
+                print( f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa','street_err')
+                print(V.args[1])
+                print(UserInput.osoite)
+                response = {'Error': 'number_error', 'message': f'Osoite {data.get("osoite")} tuotti virheellisen tuloksen. Tarkenna osoitteen numeroa haussa'}
+            
+            
+
+
+            return response, 406
