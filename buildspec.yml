@@ -5,12 +5,12 @@ phases:
       - "echo Build started on `date`"
       - "echo Building the Docker image..."
       - "docker build -t oschku/mvp-build ."
-      - "docker tag oschku/mvp-build 740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-repo"
+      - "docker tag oschku/mvp-build 740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-backend"
   post_build: 
     commands: 
       - "echo Build completed on `date`"
       - "echo Pushing the Docker image..."
-      - "docker push 740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-repo"
+      - "docker push 740126133497.dkr.ecr.eu-north-1.amazonaws.com/valuation-backend"
   pre_build: 
     commands: 
       - "echo Logging in to AWS..."
