@@ -628,7 +628,7 @@ class geodata():
         '''
         print('fetching latest cpi')
         
-        URL = 'http://pxnet2.stat.fi/PXWeb/api/v1/fi/StatFin/hin/khi/kk/statfin_khi_pxt_11xl.px'
+        URL = 'https://pxnet2.stat.fi:443/PXWeb/api/v1/fi/StatFin/hin/khi/kk/statfin_khi_pxt_11xl.px'
         
         
         if optional_arg == 'date_time':
