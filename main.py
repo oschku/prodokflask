@@ -68,6 +68,10 @@ def run(
 
     # key = 'bshWIEe2dQV1avsY3uCgwpnBh2HHbOQAaxaTQxWa_'
     current_user = int(data.get('user'))
+    created_on = datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
+    print(created_on)
+    data.update({'created_on':created_on})
+
     sql = (f'SELECT apikey FROM public.api_keys \
         WHERE api_keys.user_id = {current_user} \
                 ORDER BY user_id ASC   ')
@@ -219,6 +223,10 @@ def input(
     sql = (f'SELECT apikey FROM public.api_keys \
         WHERE api_keys.user_id = {current_user} \
                 ORDER BY user_id ASC   ')
+
+    created_on = datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
+    print(created_on)
+    data.update({'created_on':created_on})
 
     with db.engine.connect() as connection:
         results = pd.read_sql(sql = sql, con = connection)
