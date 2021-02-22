@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime as dtm
 from project import valuation
 import json
 from project.models import db, UserInput, ApiKey
@@ -6,14 +6,24 @@ from sqlalchemy import text
 import pandas as pd
 from dateutil import tz 
 import pytz
+import datetime
 
+def convert_datetime_timezone(dt, tz1, tz2):
+    tz1 = pytz.timezone(tz1)
+    tz2 = pytz.timezone(tz2)
 
+    dt = datetime.datetime.strptime(dt,"%d.%m.%Y %H:%M:%S")
+    dt = tz1.localize(dt)
+    print(dt)
+    dt = dt.astimezone(tz2)
+    dt = dt.strftime("%d.%m.%Y %H:%M:%S")
 
+    return dt
 
 
 
 def get_timestamp():
-    return datetime.now().strftime(("%Y-%m-%d %H:%m:%S"))
+    return dtm.now().strftime(("%Y-%m-%d %H:%m:%S"))
 
 
 def run(
@@ -68,10 +78,9 @@ def run(
     }
 
 
-    # key = 'bshWIEe2dQV1avsY3uCgwpnBh2HHbOQAaxaTQxWa_'
+    
     current_user = int(data.get('user'))
-    created_on = datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
-    created_on = pytz.timezone('Europe/Helsinki').localize(created_on)
+    created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
     print(created_on)
     data.update({'created_on':created_on})
 
@@ -227,8 +236,7 @@ def input(
         WHERE api_keys.user_id = {current_user} \
                 ORDER BY user_id ASC   ')
 
-    created_on = datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
-    created_on = pytz.timezone('Europe/Helsinki').localize(created_on)
+    created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
     print(created_on)
     data.update({'created_on':created_on})
 
