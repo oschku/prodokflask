@@ -4,6 +4,8 @@ import json
 from project.models import db, UserInput, ApiKey
 from sqlalchemy import text
 import pandas as pd
+from dateutil import tz 
+import pytz
 
 
 
@@ -69,6 +71,7 @@ def run(
     # key = 'bshWIEe2dQV1avsY3uCgwpnBh2HHbOQAaxaTQxWa_'
     current_user = int(data.get('user'))
     created_on = datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
+    created_on = pytz.timezone('Europe/Helsinki').localize(created_on)
     print(created_on)
     data.update({'created_on':created_on})
 
@@ -225,6 +228,7 @@ def input(
                 ORDER BY user_id ASC   ')
 
     created_on = datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
+    created_on = pytz.timezone('Europe/Helsinki').localize(created_on)
     print(created_on)
     data.update({'created_on':created_on})
 
