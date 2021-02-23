@@ -82,6 +82,7 @@ def run(
     current_user = int(data.get('user'))
     created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
     print(created_on)
+    created_on = datetime.datetime.strptime(created_on, '%d.%m.%Y %H:%M:%S')
     data.update({'created_on':created_on})
 
     sql = (f'SELECT apikey FROM public.api_keys \
@@ -238,6 +239,7 @@ def input(
 
     created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
     print(created_on)
+    created_on = datetime.datetime.strptime(created_on, '%d.%m.%Y %H:%M:%S')
     data.update({'created_on':created_on})
 
     with db.engine.connect() as connection:
