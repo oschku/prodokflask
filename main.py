@@ -80,9 +80,8 @@ def run(
 
     
     current_user = int(data.get('user'))
-    created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
+    created_on = datetime.datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S') 
     print(created_on)
-    created_on = datetime.datetime.strptime(created_on, '%d.%m.%Y %H:%M:%S')
     data.update({'created_on':created_on})
 
     sql = (f'SELECT apikey FROM public.api_keys \
@@ -237,9 +236,9 @@ def input(
         WHERE api_keys.user_id = {current_user} \
                 ORDER BY user_id ASC   ')
 
-    created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
+    # created_on = convert_datetime_timezone(data.get('created_on'), "Europe/Stockholm", "UTC")    
     print(created_on)
-    created_on = datetime.datetime.strptime(created_on, '%d.%m.%Y %H:%M:%S')
+    created_on = datetime.datetime.strptime(data.get('created_on'), '%d.%m.%Y %H:%M:%S')
     data.update({'created_on':created_on})
 
     with db.engine.connect() as connection:
