@@ -30,7 +30,7 @@ idna==2.10
 intel-openmp==2020.0.133
 isort==5.6.4
 itsdangerous==1.1.0
-jinja2==2.11.2
+jinja2==2.11.3
 joblib==0.17.0
 pycurl==7.43.0.6
 spatialite==0.0.3
